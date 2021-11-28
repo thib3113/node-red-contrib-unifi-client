@@ -29,6 +29,14 @@
       "unifi-raw-controller-request": "build/nodes/RawControllerRequest.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thib3113/node-red-contrib-unifi-client"
+  },
+  "bugs": {
+    "url": "https://github.com/thib3113/node-red-contrib-unifi-client/issues"
+  },
+  "homepage": "https://github.com/thib3113/node-red-contrib-unifi-client#readme",
   "author": {
     "email": "thib3113@gmail.com",
     "name": "Thibaut severac"
