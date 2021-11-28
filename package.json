@@ -8,7 +8,7 @@
     "start": "node -r source-map-support/register ./lib/test.js",
     "build": "yarn public && tsc -p tsconfig.json",
     "build:prod": "yarn public && tsc -p tsconfig.build.json",
-    "public": "rimraf build && copyfiles -E -V -u 1 ./public/**/* build/nodes",
+    "public": "rimraf build && copyfiles -E -V -u 1 \"./public/**/*\" build/nodes",
     "test": "jest",
     "test:CI": "jest --ci",
     "prepublishOnly": "npm run build:prod",
