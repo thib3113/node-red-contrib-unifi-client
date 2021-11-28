@@ -8,16 +8,7 @@ import { EProxyNamespaces } from 'unifi-client';
 import { TSendMessage } from '../types/TSendMessage';
 
 class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
-    private polling: boolean = false;
     private eventsUntil: number = 0;
-    private get pollInterval(): number {
-        return this._pollInterval;
-    }
-    private set pollInterval(value: number) {
-        this._pollInterval = Number(value) > 0 ? Number(value) * 1000 : this.pollInterval;
-    }
-    private _pollInterval: number = 5000;
-    private pollTimeout?: NodeJS.Timeout;
     init(
         type: string,
         construct?: (node: any, definition: any) => void,
@@ -26,20 +17,6 @@ class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
         super.init(type, construct, opts, () => {
             this.node.on('input', async (msg: TDoorEventsMsg, send, done) => {
                 try {
-                    //manually ask a verification
-                    if (msg.pollInterval) {
-                        this.pollInterval = msg.pollInterval;
-                    }
-
-                    if (msg.polling || msg.polling === false) {
-                        if (msg.polling) {
-                            this.polling = true;
-                        } else {
-                            this.polling = false;
-                            this.pollLoopStop();
-                        }
-                    }
-
                     if (msg.until) {
                         this.eventsUntil = msg.until;
                     }
@@ -50,24 +27,11 @@ class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
                 }
                 done();
             });
-
-            this.node.on('close', () => {
-                this.pollLoopStop();
-            });
-
-            this.pollInterval = this.definition.pollInterval;
-
-            if (this.definition.polling) {
-                this.polling = true;
-                this.poll();
-            }
         });
     }
 
     private async poll(sendFn?: (msg: TSendMessage) => void) {
         try {
-            this.pollLoopStop();
-
             this.setStatus(ENodeStatus.PENDING, 'start polling');
 
             try {
@@ -159,25 +123,9 @@ class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
                 this.node.error(e);
                 this.setStatus(ENodeStatus.ERROR, `fail to read door datas : ${e.message}`);
             }
-
-            if (this.polling) {
-                this.pollLoopStart();
-            }
         } catch (e: any) {
             this.node.error(e);
         }
-    }
-
-    private pollLoopStop() {
-        if (this.pollTimeout) {
-            clearTimeout(this.pollTimeout);
-        }
-    }
-
-    private pollLoopStart() {
-        this.pollTimeout = setTimeout(() => {
-            this.poll();
-        }, this.pollInterval);
     }
 }
 

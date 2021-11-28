@@ -6,17 +6,6 @@
                 value: '',
                 required: false
             },
-            polling: {
-                value: true,
-                required: true
-            },
-            pollInterval: {
-                value: 5,
-                required: true,
-                validate:function(v) {
-                    return RED.validators.number()(v) && v > 0
-                }
-            },
             controllerNodeId: {
                 value: '',
                 type: 'unifi-controller',
@@ -33,18 +22,6 @@
         },
         labelStyle: function () {
             return this.name ? 'node_label_italic' : '';
-        },
-        oneditprepare: function () {
-            const $typedBool = $('#node-autoPollingInput');
-            $typedBool.typedInput({
-                type: 'bool',
-                types: ['bool']
-            })
-            $typedBool.typedInput('value', $('#node-input-polling').get(0).checked? 'true' : 'false');
-        },
-        oneditsave: function () {
-            const val = $('#node-autoPollingInput').val() === 'true';
-            $('#node-input-polling').prop('checked', val);
         },
         button: {
             onclick: function () {
@@ -75,15 +52,6 @@
             <option value="">Choose...</option>
         </select>
     </div>
-    <div class="form-row">
-        <label for="node-autoPollingInput"><i class="fa fa-globe"></i> autoPolling</label>
-        <input type="text" id="node-autoPollingInput">
-        <input type="checkbox" style="display:none;" id="node-input-polling" />
-    </div>
-    <div class="form-row">
-        <label for="node-input-pollInterval"><i class="fa fa-tag"></i> pollInterval</label>
-        <input type="number" id="node-input-pollInterval" value="5" />
-    </div>
 </script>
 
 <script data-help-name="unifi-door-events" type="text/markdown">
@@ -91,13 +59,9 @@ Receive events from Unifi access Doors
 
 ### Inputs
 
-There is no real needs of inputs, but you can use this :
+Use an inject with a repeat option, each call (or click on the button) will check for events
 
 : until (number)        :  A ms timestamp describing until when you want events
-: polling (boolean)     :  Programmatically enable/disable auto polling
-: pollInterval (number) : Programmatically set the polling interval
-
-each messages (or click the button), will manually trigger a poll of the events
 
 ### Outputs
 
@@ -126,7 +90,7 @@ each messages (or click the button), will manually trigger a poll of the events
 
 ### Details
 
-This node is used to get Doors events from Unifi Access . Each events from "until" (or last poll), will produce one message, per event .
+This node is used to get Doors events from Unifi Access . Each events  from"until" (or last poll), will produce one message, per event .
 Feel free to do somethings with it .
 
 ### References
