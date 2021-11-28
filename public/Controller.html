@@ -1,0 +1,68 @@
+<script type="text/javascript">
+    RED.nodes.registerType('unifi-controller', {
+        category: 'config',
+        defaults: {
+            name: {
+                value: 'My Controller',
+                required: false
+            },
+            url: {
+                value: 'https://unifi',
+                required: true
+            },
+            strictSSL: {
+                value: false,
+                required: true
+            }
+        },
+        credentials: {
+            username: { type: 'text' },
+            password: { type: 'password' }
+        },
+        label: function () {
+            return this.name || 'unifi-config';
+        },
+        labelStyle: function () {
+            return this.name ? 'node_label_italic' : '';
+        },
+        oneditprepare: function () {
+            $typedBool = $('#node-strictSSLInput');
+            $typedBool.typedInput({
+                type: 'bool',
+                types: ['bool']
+            })
+            $typedBool.typedInput('value', $('#node-config-input-strictSSL').get(0).checked? 'true' : 'false');
+        },
+        oneditsave: function () {
+            $('#node-config-input-strictSSL').prop('checked', $('#node-strictSSLInput').val() === 'true');
+        }
+    });
+</script>
+
+<script data-template-name="unifi-controller" type="text/html">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-url"><i class="fa fa-globe"></i> Url</label>
+        <input type="text" id="node-config-input-url" placeholder="Controller Url" />
+    </div>
+    <div class="form-row">
+        <label for="node-strictSSLInput"><i class="fa fa-globe"></i> strictSSL</label>
+        <input type="text" id="node-strictSSLInput" />
+        <input type="checkbox" style="display:none;" id="node-config-input-strictSSL" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-username"><i class="fa fa-user"></i> UserName</label>
+        <input type="text" id="node-config-input-username" placeholder="UserName" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-password" placeholder="Password" />
+    </div>
+</script>
+
+<script data-help-name="unifi-controller" type="text/markdown">
+    This is the configuration node, that will configure the connection to Unifi
+</script>
