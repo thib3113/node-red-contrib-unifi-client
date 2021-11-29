@@ -20,7 +20,17 @@
   "keywords": [
     "node-red",
     "iot",
-    "unifi"
+    "unifi",
+    "ubiquiti",
+    "unifi-controller",
+    "unifi-events",
+    "Ubiquiti Networks",
+    "ubnt",
+    "network",
+    "UDR",
+    "UDM",
+    "UDM pro",
+    "cloud-key"
   ],
   "node-red": {
     "nodes": {
