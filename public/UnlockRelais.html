@@ -63,45 +63,5 @@
 </script>
 
 <script data-help-name="unifi-access-unlock-relais" type="text/markdown">
-Receive events from Unifi access Doors
-
-### Inputs
-
-Use an inject with a repeat option, each call (or click on the button) will check for events
-
-: until (number)        :  A ms timestamp describing until when you want events
-
-### Outputs
-
-1. Standard output
-: payload.door (object) : Object containing door informations (use debug)
-: payload.door.user_id (string) : the user_id
-: payload.door.name (string) : the name
-: payload.door.first_name (string) : the first_name
-: payload.door.last_name (string) : the last_name
-: payload.door.door (string) : the door
-: payload.door.door_id (string) : the door_id
-: payload.door.door_type (string) : the door_type
-: payload.door.location (string) : the location
-: payload.door.location_id (string) : the location_id
-: payload.door.location_type (string) : the location_type
-: payload.door.door_entry_method (string) : the door_entry_method
-: payload.door.credential_provider (string) : the credential_provider
-: payload.door.event_time (number) : the timestamp (seconds) for this event
-: payload.door.result (string) : the result of this event
-: payload.door.resource_id (string) : the resource_id
-
-
-
-
-
-
-### Details
-
-This node is used to get Doors events from Unifi Access . Each events  from"until" (or last poll), will produce one message, per event .
-Feel free to do somethings with it .
-
-### References
-
-not for the moment
+    TODO : write a documentation
 </script>
