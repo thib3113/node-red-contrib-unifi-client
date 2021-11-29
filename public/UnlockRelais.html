@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('unifi-door-events', {
+    RED.nodes.registerType('unifi-access-unlock-relais', {
         category: 'UniFiAccess',
         defaults: {
             name: {
@@ -10,15 +10,19 @@
                 value: '',
                 type: 'unifi-controller',
                 required: true
+            },
+            deviceId: {
+                value: '',
+                required: true
             }
         },
         inputs: 1,
-        outputs: 1,
+        outputs: 0,
         icon: 'unifi.png',
         color: '#159eda',
-        paletteLabel: 'Door Events',
+        paletteLabel: 'Unlock Relais',
         label: function () {
-            return this.name || 'unifi-door-events';
+            return this.name || 'unifi-access-unlock-relais';
         },
         labelStyle: function () {
             return this.name ? 'node_label_italic' : '';
@@ -30,10 +34,10 @@
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     success: function (resp) {
-                        RED.notify('polling of door events sent');
+                        RED.notify('start getting devices');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        RED.notify('fail to poll door events');
+                        RED.notify('fail to send request');
                     }
                 });
             }
@@ -41,7 +45,7 @@
     });
 </script>
 
-<script data-template-name="unifi-door-events" type="text/html">
+<script data-template-name="unifi-access-unlock-relais" type="text/html">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name" />
@@ -52,9 +56,13 @@
             <option value="">Choose...</option>
         </select>
     </div>
+    <div class="form-row">
+        <label for="node-input-deviceId"><i class="fa fa-tag"></i> DeviceId</label>
+        <input type="text" id="node-input-deviceId" placeholder="DeviceId" />
+    </div>
 </script>
 
-<script data-help-name="unifi-door-events" type="text/markdown">
+<script data-help-name="unifi-access-unlock-relais" type="text/markdown">
 Receive events from Unifi access Doors
 
 ### Inputs

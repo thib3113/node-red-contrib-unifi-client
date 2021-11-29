@@ -9,9 +9,8 @@ import { TSendMessage } from '../types/TSendMessage';
 export class Node<
     TNode extends REDRegistry.Node<TCredentials> = any,
     TNodeDefinition extends TNodeConfig = TNodeConfig,
-    TCredentials = any,
-    TSettings = any
-> extends TechnicalNode<TNode, TNodeDefinition, TCredentials, TSettings> {
+    TCredentials = any
+> extends TechnicalNode<TNode, TNodeDefinition, TCredentials> {
     get controller(): Controller {
         if (!this._controller) {
             throw new Error(`can't retrieve _controller before init`);
@@ -54,50 +53,40 @@ export class Node<
         this.node.status(nodeStatus);
     }
 
-    public init(
-        type: string,
-        construct?: (node: any, definition: any) => void,
-        opts?: { credentials?: REDRegistry.NodeCredentials<any>; settings?: REDRegistry.NodeSettings<any> },
-        postConstructFn?: () => void
-    ): void {
-        super.init(type, construct, opts, async () => {
-            this.setStatus(ENodeStatus.PENDING, 'starting');
+    protected async init(): Promise<void> {
+        await super.init();
+        this.setStatus(ENodeStatus.PENDING, 'starting');
 
-            if (!this.definition.controllerNodeId) {
-                this.setStatus(ENodeStatus.ERROR, 'Controller not configured');
-                return;
-            }
+        if (!this.definition.controllerNodeId) {
+            this.setStatus(ENodeStatus.ERROR, 'Controller not configured');
+            return;
+        }
 
-            const controllerNode = this.nodeRED.nodes.getNode(this.definition.controllerNodeId) as TControllerNode;
+        const controllerNode = this.nodeRED.nodes.getNode(this.definition.controllerNodeId) as TControllerNode;
 
-            if (!controllerNode) {
-                this.setStatus(ENodeStatus.ERROR, 'fail to get controller configuration');
-                return;
-            }
+        if (!controllerNode) {
+            this.setStatus(ENodeStatus.ERROR, 'fail to get controller configuration');
+            return;
+        }
 
-            const { controller } = controllerNode;
-            if (!controller) {
-                this.setStatus(ENodeStatus.ERROR, 'fail to get controller configuration');
-                return;
-            }
+        const { controller } = controllerNode;
+        if (!controller) {
+            this.setStatus(ENodeStatus.ERROR, 'fail to get controller configuration');
+            return;
+        }
 
-            this._controller = controller;
+        this._controller = controller;
 
-            this.setStatus(ENodeStatus.PENDING, 'connecting to unifi');
+        this.setStatus(ENodeStatus.PENDING, 'connecting to unifi');
 
-            try {
-                await controller.login();
-            } catch (e: any) {
-                this.setStatus(ENodeStatus.ERROR, e.message);
-                return;
-            }
+        try {
+            await controller.login();
+        } catch (e: any) {
+            this.setStatus(ENodeStatus.ERROR, e.message);
+            return;
+        }
 
-            this.setStatus(ENodeStatus.READY, 'connected to unifi');
-
-            if (postConstructFn) {
-                postConstructFn();
-            }
-        });
+        this.setStatus(ENodeStatus.READY, 'connected to unifi');
     }
 
     protected send(msg: TSendMessage, sendFn?: (msg: TSendMessage) => void) {
