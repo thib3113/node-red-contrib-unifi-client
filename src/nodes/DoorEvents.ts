@@ -6,27 +6,25 @@ import { TDoorEventsNodeConfig } from '../types/TDoorEventsNodeConfig';
 import { TDoorEventsMsg } from '../types/TDoorEventsMsg';
 import { EProxyNamespaces } from 'unifi-client';
 import { TSendMessage } from '../types/TSendMessage';
+import { registerNode } from '../lib/registerNode';
 
 class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
     private eventsUntil: number = 0;
-    init(
-        type: string,
-        construct?: (node: any, definition: any) => void,
-        opts?: { credentials?: REDRegistry.NodeCredentials<any>; settings?: REDRegistry.NodeSettings<any> }
-    ): void {
-        super.init(type, construct, opts, () => {
-            this.node.on('input', async (msg: TDoorEventsMsg, send, done) => {
-                try {
-                    if (msg.until) {
-                        this.eventsUntil = msg.until;
-                    }
 
-                    await this.poll(send);
-                } catch (e: any) {
-                    this.node.error(e);
+    protected async init(): Promise<void> {
+        await super.init();
+
+        this.node.on('input', async (msg: TDoorEventsMsg, send, done) => {
+            try {
+                if (msg.until) {
+                    this.eventsUntil = msg.until;
                 }
-                done();
-            });
+
+                await this.poll(send);
+            } catch (e: any) {
+                this.node.error(e);
+            }
+            done();
         });
     }
 
@@ -130,6 +128,5 @@ class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
 }
 
 module.exports = (RED: REDRegistry.NodeAPI) => {
-    const node = new DoorEventsNode(RED);
-    node.init('unifi-door-events');
+    registerNode(RED, 'unifi-door-events', DoorEventsNode);
 };

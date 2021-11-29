@@ -26,7 +26,9 @@
     "nodes": {
       "controller-config": "build/nodes/Controller.js",
       "door-events": "build/nodes/DoorEvents.js",
-      "unifi-raw-controller-request": "build/nodes/RawControllerRequest.js"
+      "unifi-raw-controller-request": "build/nodes/RawControllerRequest.js",
+      "unifi-get-access-devices": "build/nodes/GetAccessDevices.js",
+      "unifi-access-unlock-relais": "build/nodes/UnlockRelais.js"
     }
   },
   "repository": {
