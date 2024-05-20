@@ -4,7 +4,7 @@ import * as RED from 'node-red';
 export class TechnicalNode<
     TNode extends REDRegistry.Node<TCredentials> = any,
     TNodeDefinition extends REDRegistry.NodeDef = any,
-    TCredentials = any
+    TCredentials extends Object = {}
 > {
     protected get definition(): TNodeDefinition {
         if (!this._definition) {

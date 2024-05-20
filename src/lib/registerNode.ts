@@ -5,7 +5,7 @@ import { TechnicalNode } from './TechnicalNode';
 export function registerNode<
     TNode extends REDRegistry.Node<TCredentials> = any,
     TNodeDefinition extends REDRegistry.NodeDef = any,
-    TCredentials = any,
+    TCredentials extends Object = {},
     TSettings = any
 >(
     nodeRED: RED.NodeAPI,

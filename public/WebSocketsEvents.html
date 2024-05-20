@@ -1,0 +1,61 @@
+<script type="text/javascript">
+    RED.nodes.registerType('unifi-core-events', {
+        category: 'UniFiCore',
+        defaults: {
+            name: {
+                value: '',
+                required: false
+            },
+            controllerNodeId: {
+                value: '',
+                type: 'unifi-controller',
+                required: true
+            },
+            site: {
+                value: '',
+                required: false
+            },
+            event: {
+                value: '*',
+                required: false
+            }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: 'unifi.png',
+        color: '#159eda',
+        paletteLabel: 'WebSockets Events',
+        label: function () {
+            return this.name || 'unifi-core-events';
+        },
+        labelStyle: function () {
+            return this.name ? 'node_label_italic' : '';
+        }
+    });
+</script>
+
+<script data-template-name="unifi-core-events" type="text/html">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-controllerNodeId"><i class="fa fa-globe"></i> Controller</label>
+        <select id="node-input-controllerNodeId">
+            <option value="">Choose...</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-site"><i class="fa fa-globe"></i> Site</label>
+        <input type="text" id="node-input-site" placeholder="use the default site from controller"/>
+    </div>
+    <div class="form-row">
+        <label for="node-input-event"><i class="fa fa-globe"></i> Event filter</label>
+        <input type="text" id="node-input-event" placeholder="event filter"/>
+        <div class="form-tips" id="node-tip" style="margin-top: 10px">Use <code>*</code> to get all events</div>
+    </div>
+</script>
+
+<script data-help-name="unifi-core-events" type="text/markdown">
+Allow to receive events from unifi . It can be a lot of different events, identified by the topic
+</script>

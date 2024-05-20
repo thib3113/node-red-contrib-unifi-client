@@ -3,21 +3,30 @@ import { TechnicalNode } from './TechnicalNode';
 import { TNodeConfig } from '../types/TNodeConfig';
 import { TControllerNode } from '../types/TControllerNode';
 import { ENodeStatus } from './ENodeStatus';
-import { Controller } from 'unifi-client';
+import { Controller, Site } from 'unifi-client';
 import { TSendMessage } from '../types/TSendMessage';
 
-export class Node<
+export class ControllerNode<
     TNode extends REDRegistry.Node<TCredentials> = any,
     TNodeDefinition extends TNodeConfig = TNodeConfig,
-    TCredentials = any
+    TCredentials extends Object = {}
 > extends TechnicalNode<TNode, TNodeDefinition, TCredentials> {
+    private readonly sitesCache: Record<string, Site> = {};
+
+    get site(): Site {
+        if (!this._site) {
+            throw new Error(`can't retrieve _site before init`);
+        }
+        return this._site;
+    }
+    private _site?: Site;
+
     get controller(): Controller {
         if (!this._controller) {
             throw new Error(`can't retrieve _controller before init`);
         }
         return this._controller;
     }
-    // private controllerNode?: unifiControllerNode;
     private _controller?: Controller;
 
     protected setStatus(status: ENodeStatus, text?: string) {
@@ -69,7 +78,7 @@ export class Node<
             return;
         }
 
-        const { controller } = controllerNode;
+        const { controller, site } = controllerNode;
         if (!controller) {
             this.setStatus(ENodeStatus.ERROR, 'fail to get controller configuration');
             return;
@@ -86,10 +95,33 @@ export class Node<
             return;
         }
 
+        try {
+            this._site = await this.getSite(site);
+        } catch (e: any) {
+            this.setStatus(ENodeStatus.ERROR, e.message);
+            return;
+        }
+
         this.setStatus(ENodeStatus.READY, 'connected to unifi');
     }
 
+    async getSite(name?: string): Promise<Site> {
+        if (!name) {
+            return this.site;
+        }
+
+        if (this.sitesCache[name]) {
+            return this.sitesCache[name];
+        }
+
+        const site = (await this.controller.getSites()).find((s) => s.name === name);
+        if (!site) {
+            throw new Error(`fail to get site :"${name}`);
+        }
+        return (this.sitesCache[name] = site);
+    }
+
     protected send(msg: TSendMessage, sendFn?: (msg: TSendMessage) => void) {
-        (sendFn || this.node.send)(msg);
+        (sendFn || this.node.send.bind(this.node))(msg);
     }
 }

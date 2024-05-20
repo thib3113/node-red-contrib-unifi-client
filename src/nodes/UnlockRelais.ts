@@ -1,4 +1,4 @@
-import { Node } from '../lib/Node';
+import { ControllerNode } from '../lib/ControllerNode';
 import * as REDRegistry from '@node-red/registry';
 import { ENodeStatus } from '../lib/ENodeStatus';
 import { EProxyNamespaces } from 'unifi-client';
@@ -7,7 +7,7 @@ import { TUnlockRelaisNode } from '../types/TUnlockRelaisNode';
 import { TUnlockRelaisNodeConfig } from '../types/TUnlockRelaisNodeConfig';
 import { registerNode } from '../lib/registerNode';
 
-class UnlockRelaisNode extends Node<TUnlockRelaisNode, TUnlockRelaisNodeConfig> {
+class UnlockRelaisNode extends ControllerNode<TUnlockRelaisNode, TUnlockRelaisNodeConfig> {
     private deviceId: string = '';
     protected async init(): Promise<void> {
         await super.init();

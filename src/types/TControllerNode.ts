@@ -4,4 +4,5 @@ import { TControllerCredentials } from './TControllerCredentials';
 
 export type TControllerNode = RED.Node<TControllerCredentials> & {
     controller: Controller;
+    site: string;
 };

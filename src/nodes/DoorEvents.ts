@@ -1,4 +1,4 @@
-import { Node } from '../lib/Node';
+import { ControllerNode } from '../lib/ControllerNode';
 import * as REDRegistry from '@node-red/registry';
 import { ENodeStatus } from '../lib/ENodeStatus';
 import { TDoorEventsNode } from '../types/TDoorEventsNode';
@@ -8,7 +8,7 @@ import { EProxyNamespaces } from 'unifi-client';
 import { TSendMessage } from '../types/TSendMessage';
 import { registerNode } from '../lib/registerNode';
 
-class DoorEventsNode extends Node<TDoorEventsNode, TDoorEventsNodeConfig> {
+class DoorEventsNode extends ControllerNode<TDoorEventsNode, TDoorEventsNodeConfig> {
     private eventsUntil: number = 0;
 
     protected async init(): Promise<void> {

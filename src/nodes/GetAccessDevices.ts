@@ -1,4 +1,4 @@
-import { Node } from '../lib/Node';
+import { ControllerNode } from '../lib/ControllerNode';
 import * as REDRegistry from '@node-red/registry';
 import { ENodeStatus } from '../lib/ENodeStatus';
 import { EProxyNamespaces } from 'unifi-client';
@@ -71,7 +71,7 @@ export interface Config {
     tag: string;
 }
 
-class GetAccessDevicesNode extends Node<TGetAccessDevicesNode, TGetAccessDevicesNodeConfig> {
+class GetAccessDevicesNode extends ControllerNode<TGetAccessDevicesNode, TGetAccessDevicesNodeConfig> {
     protected async init(): Promise<void> {
         await super.init();
         this.node.on('input', async (_msg, send, done) => {

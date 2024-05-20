@@ -13,7 +13,11 @@
             strictSSL: {
                 value: false,
                 required: true
-            }
+            },
+            site: {
+                value: 'default',
+                required: true
+            },
         },
         credentials: {
             username: { type: 'text' },
@@ -52,6 +56,10 @@
         <label for="node-strictSSLInput"><i class="fa fa-globe"></i> strictSSL</label>
         <input type="text" id="node-strictSSLInput" />
         <input type="checkbox" style="display:none;" id="node-config-input-strictSSL" />
+    </div>
+    <div class="form-row">
+        <label for="node-siteInput"><i class="fa fa-globe"></i> Default site</label>
+        <input type="text" id="node-siteInput" value="default"/>
     </div>
     <div class="form-row">
         <label for="node-config-input-username"><i class="fa fa-user"></i> UserName</label>

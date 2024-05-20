@@ -15,11 +15,13 @@ class ControllerNode extends TechnicalNode<TControllerNode, any, TControllerCred
             strictSSL: this.definition.strictSSL
         });
 
+        this.node.site = this.definition.site ?? 'default';
+
         this.node.on('close', async (removed: boolean, done: () => void) => {
             try {
                 if (removed) {
                     // This node has been disabled/deleted
-                    // try to logout
+                    // try to log out
                     if (this.node.controller.logged) {
                         await this.node.controller.logout();
                     }

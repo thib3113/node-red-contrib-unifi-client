@@ -1,5 +1,5 @@
 import { NodeAPI } from 'node-red';
-import { Node } from '../lib/Node';
+import { ControllerNode } from '../lib/ControllerNode';
 import { TRawControllerRequestNode } from '../types/TRawControllerRequestNode';
 import { TRawControllerRequestNodeMsg } from '../types/TRawControllerRequestNodeMsg';
 import { EProxyNamespaces } from 'unifi-client';
@@ -7,7 +7,7 @@ import { Method } from 'axios';
 import { ENodeStatus } from '../lib/ENodeStatus';
 import { registerNode } from '../lib/registerNode';
 
-class RawControllerRequestNode extends Node<TRawControllerRequestNode> {
+class RawControllerRequestNode extends ControllerNode<TRawControllerRequestNode> {
     protected async init(): Promise<void> {
         await super.init();
         this.node.on('input', async (msg: TRawControllerRequestNodeMsg, send, done) => {
