@@ -33,6 +33,7 @@
     "cloud-key"
   ],
   "node-red": {
+    "version": ">=3.0.0",
     "nodes": {
       "controller-config": "build/nodes/Controller.js",
       "door-events": "build/nodes/DoorEvents.js",

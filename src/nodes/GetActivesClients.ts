@@ -16,13 +16,15 @@ class GetActivesClientsNode extends ControllerNode<TGetClientsNode, TGetClientsN
                 _send({
                     payload:
                         (
-                            await (await this.getSite(msg?.site)).clients.getInstance().get(`/clients/${active ? 'active' : 'history'}`, {
-                                params: {
-                                    includeUnifiDevices: true,
-                                    withinHours: 0
-                                },
-                                apiVersion: 2
-                            })
+                            await (await this.getSite(msg?.site)).clients
+                                .getInstance()
+                                .get(`/clients/${active != false ? 'active' : 'history'}`, {
+                                    params: {
+                                        includeUnifiDevices: true,
+                                        withinHours: 0
+                                    },
+                                    apiVersion: 2
+                                })
                         ).data ?? []
                 });
             } catch (e: any) {
